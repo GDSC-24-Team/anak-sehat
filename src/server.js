@@ -14,9 +14,15 @@ const AuthenticationsService = require("./services/progress/AuthenticationsServi
 const TokenManager = require("./tokenize/TokenManager");
 const AuthenticationValidator = require("./validator/authentications");
 
+// children
+const children = require("./api/children");
+const ChildrenService = require("./services/progress/ChildrenService");
+const ChildrenValidator = require("./validator/children");
+
 const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
+  const childrenService = new ChildrenService();
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -67,6 +73,13 @@ const init = async () => {
         usersService,
         tokenManager: TokenManager,
         validator: AuthenticationValidator,
+      },
+    },
+    {
+      plugin: children,
+      options: {
+        service: childrenService,
+        validator: ChildrenValidator,
       },
     },
   ]);
